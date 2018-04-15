@@ -26,7 +26,31 @@ class LocationManager
         return $locationsData;
     }
 
-    public function getLocationNodes() {
+    public function addLocation($name, $parent) {
+        $req = $this->db->prepare("INSERT INTO location (name, parent_location) VALUES (:name, :parent)");
+        $req->execute([
+            ':name' => $name,
+            ':parent' => $parent
+        ]);
+    }
+
+    public function editLocation($id, $name, $parent) {
+        $req = $this->db->prepare("UPDATE location SET name = :name, parent_location = :parent WHERE id = :id");
+        $req->execute([
+            ':name' => $name,
+            ':parent' => $parent,
+            ':id' => $id
+        ]);
+    }
+
+    public function removeLocation($id) {
+        $req = $this->db->prepare("DELETE FROM location WHERE id = :id");
+        $req->execute([
+            ':id' => $id
+        ]);
+    }
+
+    public function getLocationNodes($htmlButtons = false) {
         $locations = $this->getLocations();
 
         $locationNodes = [];
@@ -37,6 +61,23 @@ class LocationManager
 
             $currentNode['id'] = $location['id'];
             $currentNode['text'] = $location['name'];
+            $currentNode['selectable'] = false;
+
+            if($htmlButtons) {
+                $currentNode['text'] .= '
+<div class="pull-right">
+    <button class="btn btn-xs btn-primary" title="Ajouter" onclick="addLocation('.$currentNode['id'].')">
+        <i class="far fa-plus"></i>
+    </button>
+    <button class="btn btn-xs btn-primary" title="Editer" onclick="editLocation('.$currentNode['id'].')">
+        <i class="far fa-pencil"></i>
+    </button>
+    <button class="btn btn-xs btn-danger" title="Supprimer" onclick="deleteLocation('.$currentNode['id'].')">
+        <i class="far fa-trash"></i>
+    </button>
+</div>
+';
+            }
 
             if (is_null($location['parent'])) {
                 $locationNodes[] = &$currentNode;
@@ -55,11 +96,15 @@ class LocationManager
         }
     }
 
-    public function getNodeLocationCompleteList(&$locationList, $locations, $strLocation = null) {
+    public function getNodeLocationCompleteList(&$locationList, $locations, $strLocation, $parents = []) {
         $strLocation .= (($strLocation == '') ? '' : ' > ') . $locations['text'];
+
+        $parents[] = $locations['id'];
+
         $locationList[] = [
             'id' => $locations['id'],
-            'text' => $strLocation
+            'text' => $strLocation,
+            'parents' => $parents
         ];
 
         if(!isset($locations['nodes'])) {
@@ -67,7 +112,7 @@ class LocationManager
         }
 
         foreach($locations['nodes'] as $node) {
-            $this->getNodeLocationCompleteList($locationList, $node, $strLocation);
+            $this->getNodeLocationCompleteList($locationList, $node, $strLocation, $parents);
         }
     }
 }

@@ -16,3 +16,11 @@ $router->map('GET|POST', '/locations', function () {
     return $ctrl->list();
 
 }, 'locations');
+
+$router->map('POST', '/locations/delete', function () {
+    global $router;
+
+    $ctrl = new LocationController();
+    return $ctrl->delete();
+
+}, 'locations.delete');

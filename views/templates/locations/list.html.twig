@@ -9,8 +9,8 @@
     <div class="box">
         <div class="box-header">
             <h3 class="box-title">{{ L('location_LOCATIONS') }}</h3>
+            <button class="btn btn-primary pull-right" onclick="addLocation()">Ajouter un emplacement</button>
         </div>
-        <!-- /.box-header -->
         <div class="box-body">
             <div id="tree"></div>
         </div>
@@ -23,37 +23,103 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Emplacement</h4>
                 </div>
-                <div class="modal-body">
-                    <form method="POST">
-                        <input type="hidden" name="id" value="">
+                <form method="POST">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="locationId" value="">
                         <div class="form-group">
                             <label for="name">Nom de l'emplacement</label>
-                            <input type="text" class="form-control" name="name" id="name" value="">
+                            <input type="text" class="form-control" name="name" id="locationName" value="" required>
                         </div>
                         <div class="form-group">
                             <label for="name">Emplacement parent</label>
-                            <select name="parent" id="parent" class="form-control">
-                                {% for location in locationsList %}
-                                    <option value="{{ location.id }}">{{ location.text }}</option>
-                                {% endfor %}
+                            <select name="parent" id="locationParent" class="form-control">
                             </select>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                    <button type="button" class="btn btn-primary">Sauvegarder</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                    </div>
+                </form>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
     <script>
         $(function() {
-            $('#tree').treeview({data: {{ locations | raw }}});
+            $('#tree').treeview({data: {{ nodesLocations | raw }}});
 
-            $('#parent').selectize();
         });
+
+        let locations = {{ locations | raw }};
+        let locationsList = {{ locationsList | raw }};
+
+        function editLocation(id) {
+            $('#locationId').val(id);
+            $('#locationName').val(locations[id].name);
+            let select = $('#locationParent');
+
+            // Update locations list
+            select.find('option').remove();
+            select.append('<option value="">Aucun</option>');
+
+            locationsList.map(function(item) {
+                if(item.parents.map(function(item) { return parseInt(item); }).indexOf(id) !== -1) return;
+                select.append('<option value="' + item.id + '">' + item.text + '</option>');
+            });
+
+            select.val(locations[id].parent);
+
+
+            $('#locationParent').selectize({
+                allowEmptyOption: true
+            });
+            $('#locationModal').modal();
+        }
+
+        function addLocation(id) {
+            $('#locationId').val();
+            $('#locationName').val();
+            $('#locationParent').val();
+
+            let select = $('#locationParent');
+
+            // Update locations list
+            select.find('option').remove();
+            select.append('<option value="">Aucun</option>');
+
+            locationsList.map(function(item) {
+                select.append('<option value="' + item.id + '">' + item.text + '</option>');
+            });
+
+            if(id != null) {
+                select.val(id);
+            }
+
+            $('#locationParent').selectize({
+                allowEmptyOption: true
+            });
+            $('#locationModal').modal();
+        }
+
+        function deleteLocation(id) {
+            Swal({
+                title: 'Suppression d\'un emplacement',
+                text: 'Voulez-vous vraiment supprimer cet emplacement ?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Supprimer',
+                cancelButtonText: 'Annuler'
+            }).then((result) => {
+                if (result.value) {
+                    let form = $('<form method="post" action="{{ path('locations.delete') | escape('js') }}">' +
+                        '<input type="text" name="id" value="' + id + '" />' +
+                        '</form>');
+                    $('body').append(form);
+                    form.submit();
+                }
+            })
+        }
     </script>
 
 {% endblock %}
