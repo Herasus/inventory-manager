@@ -14,3 +14,7 @@
 .thumb-item img {
     height: 80px;
 }
+
+.item-tree {
+    cursor: help;
+}

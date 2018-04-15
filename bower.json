@@ -1,0 +1,24 @@
+{
+  "name": "inventory",
+  "homepage": "https://github.com/Herasus/inventory-manager",
+  "authors": [
+    "Samuel <me@samuelprak.fr>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "admin-lte": "adminlte#^2.4.3",
+    "bootstrap-treeview": "^1.2.0",
+    "selectize": "^0.12.4",
+    "sweetalert2": "^7.18.0",
+    "datatables.net-bs": "^2.1.1"
+  }
+}

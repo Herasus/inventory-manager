@@ -30,8 +30,18 @@
                 <tr>
                     <td>{{ item.name }}</td>
                     <td>{{ item.description }}</td>
-                    <td>{{ item.category.name }}</td>
-                    <td>{{ item.location.name }}</td>
+                    <td class="text-center">
+                        {{ item.category.name }}<br>
+                        <span class="item-tree" data-toggle="tooltip" title="{{ item.category.text }}">
+                            <i class="far fa-question-circle"></i>
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        {{ item.location.name }}<br>
+                        <span class="item-tree" data-toggle="tooltip" title="{{ item.location.text }}">
+                            <i class="far fa-question-circle"></i>
+                        </span>
+                    </td>
                     <td class="thumb-item">
                         {% if item.picture %}
                         <img src="uploads/documents/min/thumb_{{ item.picture }}" alt="">
@@ -169,6 +179,11 @@
 
             return false;
         }
+
+        $(function() {
+            $('#inventory').DataTable();
+            $('body').tooltip({selector: '[data-toggle="tooltip"]'});
+        });
     </script>
 
 
