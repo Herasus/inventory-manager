@@ -1,0 +1,8 @@
+/vendor/
+/bower_components/
+/tmp/
+/configuration/configuration.php
+/composer.phar
+/.idea/
+/uploads/
+/assets/js/fontawesome/fontawesome-all.min.js

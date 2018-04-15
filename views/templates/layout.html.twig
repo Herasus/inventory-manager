@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <base href="{{ getBasePath() }}">
+    <title>{% block title %}{{ L('common_INVENTORY') }}{% endblock %}</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="bower_components/admin-lte/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="bower_components/admin-lte/dist/css/skins/skin-blue.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="bower_components/selectize/dist/css/selectize.bootstrap3.css">
+    <link rel="stylesheet" href="bower_components/bootstrap-treeview/dist/bootstrap-treeview.min.css">
+
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- jQuery 3 -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+
+    <!-- Google Font -->
+    <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Main Header -->
+        <header class="main-header">
+
+            <!-- Logo -->
+            <a href="{{ path('inventory') }}" class="logo">
+                <span class="logo-mini">{{ common_INVENTORY }}</span>
+                <span class="logo-lg">{{ common_INVENTORY }}</span>
+            </a>
+
+            <!-- Header Navbar -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+            </nav>
+        </header>
+        <aside class="main-sidebar">
+            <section class="sidebar">
+                <ul class="sidebar-menu" data-widget="tree">
+                    <li class="header">MENU</li>
+                    <li{{ (getCurrentRoute() in ['inventory']) ? ' class="active"' : '' }}>
+                        <a href="{{ path('inventory') }}"><i class="far fa-fw fa-inventory"></i> <span>{{ L('common_INVENTORY') }}</span></a>
+                    </li>
+                    <li{{ (getCurrentRoute() in ['locations']) ? ' class="active"' : '' }}>
+                        <a href="{{ path('locations') }}"><i class="far fa-fw fa-map-marker"></i> <span>{{ L('location_LOCATIONS') }}</span></a>
+                    </li>
+                </ul>
+            </section>
+        </aside>
+
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    {% block header_title %}{% endblock %}
+                    <small>{% block header_description %}{% endblock %}</small>
+                </h1>
+            </section>
+
+            <section class="content container-fluid">
+                {% block body %}{% endblock %}
+            </section>
+        </div>
+
+        <footer class="main-footer">
+            <strong>Copyright &copy; {{ "now" | date('Y') }} AP-HP.</strong>
+        </footer>
+    </div>
+
+    <!-- REQUIRED JS SCRIPTS -->
+    <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="bower_components/admin-lte/dist/js/adminlte.min.js"></script>
+    <script src="bower_components/bootstrap-treeview/dist/bootstrap-treeview.min.js"></script>
+    <script src="bower_components/selectize/dist/js/standalone/selectize.js"></script>
+    <script src="assets/js/fontawesome/fontawesome-all.min.js"></script>
+
+    {% block functions %}{% endblock %}
+</body>
+</html>

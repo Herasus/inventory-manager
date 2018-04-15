@@ -1,0 +1,15 @@
+{
+    "name": "samuelprak/inventory",
+    "type": "project",
+    "require": {
+        "altorouter/altorouter": "^1.2",
+        "twig/twig": "~1.0",
+        "umpirsky/twig-php-function": "^0.2.0"
+    },
+    "authors": [
+        {
+            "name": "Samuel",
+            "email": "me@samuelprak.fr"
+        }
+    ]
+}

@@ -1,0 +1,40 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}{{ parent() }} - {{ L('common_INVENTORY') }}{% endblock %}
+{% block header_title %}{{ L('common_INVENTORY') }}{% endblock %}
+{% block header_description %}{% endblock %}
+{% block body %}
+    {{ getHTMLSessionInfo() | raw }}
+
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">{{ L('common_INVENTORY') }}</h3>
+
+            <button class="btn btn-primary pull-right">Ajouter un objet</button>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <table id="inventory" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>{{ L('item_NAME') }}</th>
+                    <th>{{ L('item_CATEGORY') }}</th>
+                    <th>{{ L('item_LOCATION') }}</th>
+                    <th>{{ L('common_ACTIONS') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

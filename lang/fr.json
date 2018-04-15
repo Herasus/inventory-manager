@@ -1,0 +1,17 @@
+{
+  "common": {
+    "HOME": "Accueil",
+    "INVENTORY": "Inventaire",
+    "ACTIONS": "Actions",
+    "NAME": "Nom"
+  },
+  "item": {
+    "LIST": "Liste des objets",
+    "NAME": "Nom",
+    "CATEGORY": "Catégorie",
+    "LOCATION": "Position"
+  },
+  "location": {
+    "LOCATIONS": "Positions"
+  }
+}
