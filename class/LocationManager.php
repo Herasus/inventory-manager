@@ -104,6 +104,7 @@ class LocationManager
         $locationList[] = [
             'id' => $locations['id'],
             'text' => $strLocation,
+            'name' => $locations['text'],
             'parents' => $parents
         ];
 

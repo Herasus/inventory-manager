@@ -9,6 +9,14 @@ $router->map('GET|POST', '/', function () {
 
 }, 'inventory');
 
+$router->map('POST', '/inventory/delete', function () {
+    global $router;
+
+    $ctrl = new ItemController();
+    return $ctrl->delete();
+
+}, 'inventory.delete');
+
 $router->map('GET|POST', '/locations', function () {
     global $router;
 

@@ -8,8 +8,10 @@
   "item": {
     "LIST": "Liste des objets",
     "NAME": "Nom",
+    "DESCRIPTION": "Description",
     "CATEGORY": "Catégorie",
-    "LOCATION": "Position"
+    "LOCATION": "Position",
+    "PICTURE": "Image"
   },
   "location": {
     "LOCATIONS": "Emplacements"

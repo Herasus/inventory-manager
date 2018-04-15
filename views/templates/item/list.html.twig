@@ -10,7 +10,7 @@
         <div class="box-header">
             <h3 class="box-title">{{ L('common_INVENTORY') }}</h3>
 
-            <button class="btn btn-primary pull-right">Ajouter un objet</button>
+            <button class="btn btn-primary pull-right" onclick="addItem();">Ajouter un objet</button>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -18,23 +18,158 @@
                 <thead>
                 <tr>
                     <th>{{ L('item_NAME') }}</th>
+                    <th>{{ L('item_DESCRIPTION') }}</th>
                     <th>{{ L('item_CATEGORY') }}</th>
                     <th>{{ L('item_LOCATION') }}</th>
+                    <th>{{ L('item_PICTURE') }}</th>
                     <th>{{ L('common_ACTIONS') }}</th>
                 </tr>
                 </thead>
                 <tbody>
                     {% for item in items %}
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.category.name }}</td>
+                    <td>{{ item.location.name }}</td>
+                    <td class="thumb-item">
+                        {% if item.picture %}
+                        <img src="uploads/documents/min/thumb_{{ item.picture }}" alt="">
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button class="btn btn-xs btn-primary" title="Editer" onclick="editItem({{ item.id }});">
+                            <i class="far fa-pencil"></i>
+                        </button>
+                        <button class="btn btn-xs btn-danger" title="Supprimer" onclick="deleteItem({{ item.id }});">
+                            <i class="far fa-trash"></i>
+                        </button>
+                    </td>
                 </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
+
+    <div class="modal fade" id="itemModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Objet</h4>
+                </div>
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="itemId" value="">
+                        <div class="form-group">
+                            <label for="itemName">Nom de l'objet</label>
+                            <input type="text" class="form-control" name="name" id="itemName" value="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemDescription">Description de l'objet</label>
+                            <input type="text" class="form-control" name="description" id="itemDescription" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="itemCategory">Catégorie</label>
+                            <select name="category" id="itemCategory" class="form-control">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemLocation">Emplacement</label>
+                            <select name="location" id="itemLocation" class="form-control">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemLocation">Image</label>
+                            <input type="file" name="picture">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let items = {{ items | json_encode | raw }};
+        let locations = {{ locations | raw }};
+        let categories = {{ categories | raw }};
+
+        function addItem() {
+            updateCategoryList();
+            updateLocationsList();
+
+            $('#itemId').val();
+            $('#itemName').val();
+            $('#itemDescription').val();
+            $('#itemCategory').val();
+            $('#itemLocation').val();
+
+            $('#itemModal').modal();
+        }
+
+        function updateCategoryList() {
+            let select = $('#itemCategory');
+            // Update locations list
+            select.find('option').remove();
+            select.append('<option value="">Aucun</option>');
+
+            categories.map(function(item) {
+                select.append('<option value="' + item.id + '">' + item.text + '</option>');
+            });
+        }
+
+        function updateLocationsList() {
+            let select = $('#itemLocation');
+            // Update locations list
+            select.find('option').remove();
+            select.append('<option value="">Aucun</option>');
+
+            locations.map(function(item) {
+                select.append('<option value="' + item.id + '">' + item.text + '</option>');
+            });
+        }
+
+        function editItem(id) {
+            let item = items[id];
+
+            updateCategoryList();
+            updateLocationsList();
+
+            $('#itemId').val(item.id);
+            $('#itemName').val(item.name);
+            $('#itemDescription').val(item.description);
+            $('#itemCategory').val(item.category.id);
+            $('#itemLocation').val(item.location.id);
+
+            $('#itemModal').modal();
+        }
+
+        function deleteItem(id) {
+            Swal({
+                title: 'Suppression d\'un objet',
+                text: 'Voulez-vous vraiment supprimer cet objet ?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Supprimer',
+                cancelButtonText: 'Annuler'
+            }).then((result) => {
+                if (result.value) {
+                    let form = $('<form method="post" action="{{ path('inventory.delete') | escape('js') }}">' +
+                        '<input type="text" name="id" value="' + id + '" />' +
+                        '</form>');
+                    $('body').append(form);
+                    form.submit();
+                }
+            });
+
+            return false;
+        }
+    </script>
+
 
 {% endblock %}

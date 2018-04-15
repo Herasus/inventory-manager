@@ -110,6 +110,7 @@ class CategoryManager
         $categoryList[] = [
             'id' => $categories['id'],
             'text' => $strCategory,
+            'name' => $categories['text'],
             'parents' => $parents
         ];
 
