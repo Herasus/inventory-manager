@@ -181,7 +181,9 @@
         }
 
         $(function() {
-            $('#inventory').DataTable();
+            $('#inventory').DataTable({
+                responsive: true
+            });
             $('body').tooltip({selector: '[data-toggle="tooltip"]'});
         });
     </script>
