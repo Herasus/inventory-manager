@@ -13,5 +13,8 @@
   },
   "location": {
     "LOCATIONS": "Emplacements"
+  },
+  "category": {
+    "CATEGORIES": "Catégories"
   }
 }

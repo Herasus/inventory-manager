@@ -1,38 +1,42 @@
 {% extends "layout.html.twig" %}
 
-{% block title %}{{ parent() }} - {{ L('location_LOCATIONS') }}{% endblock %}
-{% block header_title %}{{ L('location_LOCATIONS') }}{% endblock %}
+{% block title %}{{ parent() }} - {{ L('category_CATEGORIES') }}{% endblock %}
+{% block header_title %}{{ L('category_CATEGORIES') }}{% endblock %}
 {% block header_description %}{% endblock %}
 {% block body %}
     {{ getHTMLSessionInfo() | raw }}
 
     <div class="box">
         <div class="box-header">
-            <h3 class="box-title">{{ L('location_LOCATIONS') }}</h3>
-            <button class="btn btn-primary pull-right" onclick="addLocation()">Ajouter un emplacement</button>
+            <h3 class="box-title">{{ L('category_CATEGORIES') }}</h3>
+            <button class="btn btn-primary pull-right" onclick="addCategory()">Ajouter une catégorie</button>
         </div>
         <div class="box-body">
             <div id="tree"></div>
         </div>
     </div>
 
-    <div class="modal fade" id="locationModal" tabindex="-1" role="dialog">
+    <div class="modal fade" id="categoryModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Emplacement</h4>
+                    <h4 class="modal-title">Catégorie</h4>
                 </div>
                 <form method="POST">
                     <div class="modal-body">
-                        <input type="hidden" name="id" id="locationId" value="">
+                        <input type="hidden" name="id" id="categoryId" value="">
                         <div class="form-group">
-                            <label for="name">Nom de l'emplacement</label>
-                            <input type="text" class="form-control" name="name" id="locationName" value="" required>
+                            <label for="name">Nom de la catégorie</label>
+                            <input type="text" class="form-control" name="name" id="categoryName" value="" required>
                         </div>
                         <div class="form-group">
-                            <label for="name">Emplacement parent</label>
-                            <select name="parent" id="locationParent" class="form-control">
+                            <label for="name">Description de la catégorie</label>
+                            <input type="text" class="form-control" name="description" id="categoryDescription" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="categoryParent">Catégorie parente</label>
+                            <select name="parent" id="categoryParent" class="form-control">
                             </select>
                         </div>
                     </div>
@@ -47,50 +51,54 @@
 
     <script>
         $(function() {
-            $('#tree').treeview({data: {{ nodesLocations | raw }}});
+            $('#tree').treeview({data: {{ nodesCategories | raw }}});
 
         });
 
-        let locations = {{ locations | raw }};
-        let locationsList = {{ locationsList | raw }};
+        let categories = {{ categories | raw }};
+        let categoriesList = {{ categoriesList | raw }};
 
-        function editLocation(id) {
-            $('#locationId').val(id);
-            $('#locationName').val(locations[id].name);
-            let select = $('#locationParent');
+        function editCategory(id) {
+            $('#categoryId').val(id);
+            $('#categoryName').val(categories[id].name);
+            $('#categoryDescription').val(categories[id].description);
+            let select = $('#categoryParent');
 
-            // Update locations list
+            // Update categories list
             select.find('option').remove();
             select.append('<option value="">Aucun</option>');
 
-            locationsList.map(function(item) {
+            categoriesList.map(function(item) {
                 if(item.parents.map(function(item) { return parseInt(item); }).indexOf(id) !== -1) return;
                 select.append('<option value="' + item.id + '">' + item.text + '</option>');
             });
 
-            select.val(locations[id].parent);
+            console.log(categories[id]);
+
+            select.val(categories[id].parent);
 
 
-            $('#locationParent').selectize({
+            $('#categoryParent').selectize({
                 allowEmptyOption: true
             });
-            $('#locationModal').modal();
+            $('#categoryModal').modal();
 
             return false;
         }
 
-        function addLocation(id) {
-            $('#locationId').val();
-            $('#locationName').val();
-            $('#locationParent').val();
+        function addCategory(id) {
+            $('#categoryId').val();
+            $('#categoryName').val();
+            $('#categoryDescription').val();
+            $('#categoryParent').val();
 
-            let select = $('#locationParent');
+            let select = $('#categoryParent');
 
-            // Update locations list
+            // Update category list
             select.find('option').remove();
             select.append('<option value="">Aucun</option>');
 
-            locationsList.map(function(item) {
+            categoriesList.map(function(item) {
                 select.append('<option value="' + item.id + '">' + item.text + '</option>');
             });
 
@@ -98,25 +106,25 @@
                 select.val(id);
             }
 
-            $('#locationParent').selectize({
+            select.selectize({
                 allowEmptyOption: true
             });
-            $('#locationModal').modal();
+            $('#categoryModal').modal();
 
             return false;
         }
 
-        function deleteLocation(id) {
+        function deleteCategory(id) {
             Swal({
-                title: 'Suppression d\'un emplacement',
-                text: 'Voulez-vous vraiment supprimer cet emplacement ?',
+                title: 'Suppression d\'une catégorie',
+                text: 'Voulez-vous vraiment supprimer cette catégorie ?',
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Supprimer',
                 cancelButtonText: 'Annuler'
             }).then((result) => {
                 if (result.value) {
-                    let form = $('<form method="post" action="{{ path('locations.delete') | escape('js') }}">' +
+                    let form = $('<form method="post" action="{{ path('categories.delete') | escape('js') }}">' +
                         '<input type="text" name="id" value="' + id + '" />' +
                         '</form>');
                     $('body').append(form);

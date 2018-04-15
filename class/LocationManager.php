@@ -66,13 +66,13 @@ class LocationManager
             if($htmlButtons) {
                 $currentNode['text'] .= '
 <div class="pull-right">
-    <button class="btn btn-xs btn-primary" title="Ajouter" onclick="addLocation('.$currentNode['id'].')">
+    <button class="btn btn-xs btn-primary" title="Ajouter" onclick="addLocation('.$currentNode['id'].'); event.stopPropagation();">
         <i class="far fa-plus"></i>
     </button>
-    <button class="btn btn-xs btn-primary" title="Editer" onclick="editLocation('.$currentNode['id'].')">
+    <button class="btn btn-xs btn-primary" title="Editer" onclick="editLocation('.$currentNode['id'].'); event.stopPropagation();">
         <i class="far fa-pencil"></i>
     </button>
-    <button class="btn btn-xs btn-danger" title="Supprimer" onclick="deleteLocation('.$currentNode['id'].')">
+    <button class="btn btn-xs btn-danger" title="Supprimer" onclick="deleteLocation('.$currentNode['id'].'); event.stopPropagation();">
         <i class="far fa-trash"></i>
     </button>
 </div>

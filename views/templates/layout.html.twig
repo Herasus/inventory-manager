@@ -57,6 +57,9 @@
                     <li{{ (getCurrentRoute() in ['locations']) ? ' class="active"' : '' }}>
                         <a href="{{ path('locations') }}"><i class="far fa-fw fa-map-marker"></i> <span>{{ L('location_LOCATIONS') }}</span></a>
                     </li>
+                    <li{{ (getCurrentRoute() in ['categories']) ? ' class="active"' : '' }}>
+                        <a href="{{ path('categories') }}"><i class="far fa-fw fa-th-large"></i> <span>{{ L('category_CATEGORIES') }}</span></a>
+                    </li>
                 </ul>
             </section>
         </aside>

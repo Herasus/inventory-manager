@@ -24,3 +24,19 @@ $router->map('POST', '/locations/delete', function () {
     return $ctrl->delete();
 
 }, 'locations.delete');
+
+$router->map('GET|POST', '/categories', function () {
+    global $router;
+
+    $ctrl = new CategoryController();
+    return $ctrl->list();
+
+}, 'categories');
+
+$router->map('POST', '/categories/delete', function () {
+    global $router;
+
+    $ctrl = new CategoryController();
+    return $ctrl->delete();
+
+}, 'categories.delete');
